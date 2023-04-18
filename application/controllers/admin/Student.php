@@ -39,7 +39,6 @@ class Student extends Admin_Controller
         $length = $post['length'];
         $no = $post['start'];
         $page = $no / $length + 1;
-
         $params['page'] = $page;
         $params['limit'] = $length;
 
@@ -87,15 +86,16 @@ class Student extends Admin_Controller
      * */
     public function ajax_add()
     {
-        $this->_validate();
-        $msv = strip_tags(trim($this->input->post('msv')));
-        $fullname = strip_tags(trim($this->input->post('fullname')));
-        $email = strip_tags(trim($this->input->post('email')));
-        $date_of_birth = strip_tags(trim($this->input->post('address')));
-        $gender = strip_tags(trim($this->input->post('gender')));
-        $address = strip_tags(trim($this->input->post('address')));
-
-        if ($this->$id !== false) {
+        // $this->_validate();
+        $data_store = [];
+        $data_store['msv'] = strip_tags(trim($this->input->post('msv')));
+        $data_store['email'] = strip_tags(trim($this->input->post('email')));
+        $data_store['full_name'] = strip_tags(trim($this->input->post('full_name')));
+        $data_store['date_of_birth'] = strip_tags(trim($this->input->post('date_of_birth')));
+        $data_store['gender'] = trim($this->input->post('gender'));
+        $data_store['address'] = strip_tags(trim($this->input->post('address')));
+        dd($data_store);
+        if (($this->data_store) != false) {
             // log action
             $action = $this->router->fetch_class();
             $note = "Insert $action: " . $this->db->insert_id();
@@ -114,13 +114,42 @@ class Student extends Admin_Controller
      * */
     public function ajax_update()
     {
+        // $this->_validate();
+        // $data_store = $this->input->post();
+        // foreach ($data_store as $key => $val) {
+        //     $data_store[$key] = strip_tags(trim($val));
+        // }
+        // $data_store['gender'] = $this->input->post('gender');
+        // $response = $this->update($this->input->post('id'), $data_store);
+        // // dd($response);
+        // if ($response != false) {
+        //     // log action
+        //     $action = $this->router->fetch_class();
+        //     $note = "Update $action: " . $this->input->post('id');
+        //     $this->addLogaction($action, $note);
+            
+        //     $message['type'] = 'success';
+        //     $message['message'] = $this->lang->line('mess_update_success');
+        // } else {
+        //     $message['type'] = 'error';
+        //     $message['message'] = $this->lang->line('mess_update_unsuccess');
+        // }
+        // die(json_encode($message));
+
         $this->_validate();
-        $data_store = $this->input->post();
+        $data_store = [];
+        $data_store['msv'] = strip_tags(trim($this->input->post('msv')));
+        $data_store['email'] = strip_tags(trim($this->input->post('email')));
+        $data_store['full_name'] = strip_tags(trim($this->input->post('full_name')));
+        $data_store['date_of_birth'] = strip_tags(trim($this->input->post('date_of_birth')));
+        $data_store['gender'] = trim($this->input->post('gender'));
+        $data_store['address'] = strip_tags(trim($this->input->post('address')));
+         
         foreach ($data_store as $key => $val) {
             $data_store[$key] = strip_tags(trim($val));
         }
-        $data_store['active'] = $this->input->post('active');
-        $response = $this->ion_auth->update($this->input->post('id'), $data_store);
+        $response = $this->update($this->input->post('id'), $data_store);
+        
         if ($response != false) {
             // log action
             $action = $this->router->fetch_class();
