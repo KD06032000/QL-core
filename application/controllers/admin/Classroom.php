@@ -11,7 +11,7 @@ class Classroom extends Admin_Controller
     {
         parent::__construct();
         //tải thư viện
-        $this->lang->load('class_lang');
+        $this->lang->load('classroom_lang');
         $this->load->model('Class_model');
         $this->_data = new Class_model();
         $this->_name_controller = $this->router->fetch_class();
@@ -86,14 +86,15 @@ class Classroom extends Admin_Controller
      * */
     public function ajax_add()
     {
-        $this->_validate();
-        $malop = strip_tags(trim($this->input->post('malop')));
-        $name = strip_tags(trim($this->input->post('name')));
-        $siso = strip_tags(trim($this->input->post('siso')));
-        $active = strip_tags(trim($this->input->post('active')));
-        $subject = strip_tags(trim($this->input->post('subject')));
-
-        if ($this->$id !== false) {
+        // $this->_validate();
+        $data_store = [];
+        $data_store['malop'] = strip_tags(trim($this->input->post('malop')));
+        $data_store['name'] = strip_tags(trim($this->input->post('name')));
+        $data_store['siso'] = strip_tags(trim($this->input->post('siso')));
+        $data_store['active'] = strip_tags(trim($this->input->post('active')));
+        $data_store['subject'] = strip_tags(trim($this->input->post('subject')));
+        
+        if (($this->data_store) !== false) {
             // log action
             $action = $this->router->fetch_class();
             $note = "Insert $action: " . $this->db->insert_id();
@@ -117,13 +118,14 @@ class Classroom extends Admin_Controller
         foreach ($data_store as $key => $val) {
             $data_store[$key] = strip_tags(trim($val));
         }
-        $data_store['active'] = $this->input->post('active');
+        dd($data_store);
         $response = $this->update($this->input->post('id'), $data_store);
         if ($response != false) {
             // log action
             $action = $this->router->fetch_class();
             $note = "Update $action: " . $this->input->post('id');
             $this->addLogaction($action, $note);
+            
             $message['type'] = 'success';
             $message['message'] = $this->lang->line('mess_update_success');
         } else {
@@ -159,7 +161,7 @@ class Classroom extends Admin_Controller
     private function _validate($ajax = true)
     {
         if (empty($this->input->post('id')) || !empty($this->input->post('malop'))) {
-            $rules_fullname = 'required|trim|min_length[3]|max_length[50]|trim|xss_clean|callback_validate_html|is_unique[class.class_id]';
+            $rules_fullname = 'required|trim|min_length[3]|max_length[50]|trim|xss_clean|callback_validate_html|is_unique[class.malop]';
 
         } else {
             $rules_fullname = 'trim|min_length[3]|max_length[50]|trim|xss_clean|callback_validate_html';

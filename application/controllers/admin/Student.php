@@ -86,7 +86,7 @@ class Student extends Admin_Controller
      * */
     public function ajax_add()
     {
-        // $this->_validate();
+        $this->_validate();
         $data_store = [];
         $data_store['msv'] = strip_tags(trim($this->input->post('msv')));
         $data_store['email'] = strip_tags(trim($this->input->post('email')));
@@ -94,11 +94,11 @@ class Student extends Admin_Controller
         $data_store['date_of_birth'] = strip_tags(trim($this->input->post('date_of_birth')));
         $data_store['gender'] = trim($this->input->post('gender'));
         $data_store['address'] = strip_tags(trim($this->input->post('address')));
-        dd($data_store);
-        if (($this->data_store) != false) {
+        if (($this->data_store) !== false) {
             // log action
             $action = $this->router->fetch_class();
             $note = "Insert $action: " . $this->db->insert_id();
+            // dd($note);
             $this->addLogaction($action, $note);
             $message['type'] = 'success';
             $message['message'] = $this->lang->line('mess_add_success');
@@ -114,47 +114,19 @@ class Student extends Admin_Controller
      * */
     public function ajax_update()
     {
-        // $this->_validate();
-        // $data_store = $this->input->post();
-        // foreach ($data_store as $key => $val) {
-        //     $data_store[$key] = strip_tags(trim($val));
-        // }
-        // $data_store['gender'] = $this->input->post('gender');
-        // $response = $this->update($this->input->post('id'), $data_store);
-        // // dd($response);
-        // if ($response != false) {
-        //     // log action
-        //     $action = $this->router->fetch_class();
-        //     $note = "Update $action: " . $this->input->post('id');
-        //     $this->addLogaction($action, $note);
-            
-        //     $message['type'] = 'success';
-        //     $message['message'] = $this->lang->line('mess_update_success');
-        // } else {
-        //     $message['type'] = 'error';
-        //     $message['message'] = $this->lang->line('mess_update_unsuccess');
-        // }
-        // die(json_encode($message));
-
         $this->_validate();
-        $data_store = [];
-        $data_store['msv'] = strip_tags(trim($this->input->post('msv')));
-        $data_store['email'] = strip_tags(trim($this->input->post('email')));
-        $data_store['full_name'] = strip_tags(trim($this->input->post('full_name')));
-        $data_store['date_of_birth'] = strip_tags(trim($this->input->post('date_of_birth')));
-        $data_store['gender'] = trim($this->input->post('gender'));
-        $data_store['address'] = strip_tags(trim($this->input->post('address')));
-         
+        $data_store = $this->input->post();
         foreach ($data_store as $key => $val) {
             $data_store[$key] = strip_tags(trim($val));
         }
         $response = $this->update($this->input->post('id'), $data_store);
-        
+        // dd($response);
         if ($response != false) {
             // log action
             $action = $this->router->fetch_class();
             $note = "Update $action: " . $this->input->post('id');
             $this->addLogaction($action, $note);
+            
             $message['type'] = 'success';
             $message['message'] = $this->lang->line('mess_update_success');
         } else {
@@ -162,6 +134,33 @@ class Student extends Admin_Controller
             $message['message'] = $this->lang->line('mess_update_unsuccess');
         }
         die(json_encode($message));
+
+        // $this->_validate();
+        // $data_store = [];
+        // $data_store['msv'] = strip_tags(trim($this->input->post('msv')));
+        // $data_store['email'] = strip_tags(trim($this->input->post('email')));
+        // $data_store['full_name'] = strip_tags(trim($this->input->post('full_name')));
+        // $data_store['date_of_birth'] = strip_tags(trim($this->input->post('date_of_birth')));
+        // $data_store['gender'] = trim($this->input->post('gender'));
+        // $data_store['address'] = strip_tags(trim($this->input->post('address')));
+         
+        // foreach ($data_store as $key => $val) {
+        //     $data_store[$key] = strip_tags(trim($val));
+        // }
+        // $response = $this->update($this->input->post('id'), $data_store);
+        
+        // if ($response != false) {
+        //     // log action
+        //     $action = $this->router->fetch_class();
+        //     $note = "Update $action: " . $this->input->post('id');
+        //     $this->addLogaction($action, $note);
+        //     $message['type'] = 'success';
+        //     $message['message'] = $this->lang->line('mess_update_success');
+        // } else {
+        //     $message['type'] = 'error';
+        //     $message['message'] = $this->lang->line('mess_update_unsuccess');
+        // }
+        // die(json_encode($message));
     }
 
     /*
@@ -199,7 +198,7 @@ class Student extends Admin_Controller
 
         $rules = [
             [
-                'field' => 'fullname',
+                'field' => 'full_name',
                 'label' => 'Họ và tên',
                 'rules' => $rules_fullname
             ],
@@ -217,6 +216,11 @@ class Student extends Admin_Controller
                 'field' => 'address',
                 'label' => 'Địa chỉ',
                 'rules' => 'trim|xss_clean|max_length[50]|callback_validate_html'
+            ],
+            [
+                'field' => 'date_of_birthday',
+                'label' => 'Ngày sinh',
+                'rules' => 'trim|strip_tags|xss_clean|callback_validate_html|callback_max_time_current'
             ],
             [
                 'field' => 'email',

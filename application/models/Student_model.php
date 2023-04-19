@@ -20,5 +20,5 @@ class Student_model extends APS_Model
         $query = $this->db->get()->result();
         return $query;
     }
-    
+
 }
