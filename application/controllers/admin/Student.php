@@ -98,8 +98,8 @@ class Student extends Admin_Controller
             // log action
             $action = $this->router->fetch_class();
             $note = "Insert $action: " . $this->db->insert_id();
-            // dd($note);
             $this->addLogaction($action, $note);
+            // dd('asd');
             $message['type'] = 'success';
             $message['message'] = $this->lang->line('mess_add_success');
         } else {

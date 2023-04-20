@@ -13,6 +13,7 @@ class Student_model extends APS_Model
         $this->column_search = array('id', 'msv', 'full_name', 'email', 'date_of_birth', 'gender','address'); //thiết lập cột search
         $this->order_default = array('id' => 'desc'); //cột sắp xếp mặc định
     }
+    
     public function get_student($id) {
         $this->db->select('*');
         $this->db->from("students");

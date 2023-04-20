@@ -13,6 +13,7 @@ class Class_model extends APS_Model
         $this->column_search = array('id','class_id', 'class_name', 'siso', 'active', 'class_subject'); //thiết lập cột search
         $this->order_default = array('id' => 'desc'); //cột sắp xếp mặc định
     }
+    
     public function get_classroom($id) {
         $this->db->select('*');
         $this->db->from("class");

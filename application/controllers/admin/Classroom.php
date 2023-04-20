@@ -86,7 +86,7 @@ class Classroom extends Admin_Controller
      * */
     public function ajax_add()
     {
-        // $this->_validate();
+        $this->_validate();
         $data_store = [];
         $data_store['malop'] = strip_tags(trim($this->input->post('malop')));
         $data_store['name'] = strip_tags(trim($this->input->post('name')));
@@ -118,8 +118,9 @@ class Classroom extends Admin_Controller
         foreach ($data_store as $key => $val) {
             $data_store[$key] = strip_tags(trim($val));
         }
-        dd($data_store);
+        // dd($data_store);
         $response = $this->update($this->input->post('id'), $data_store);
+        // dd($response);
         if ($response != false) {
             // log action
             $action = $this->router->fetch_class();

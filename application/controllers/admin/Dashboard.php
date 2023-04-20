@@ -16,7 +16,7 @@ class Dashboard extends Admin_Controller
     {
         parent::__construct();
         $this->load->library('GoogleAnalytics');
-        $this->lang->load('dash_lang');
+        // $this->lang->load('dash_lang');
         $this->load->model(['post_model','users_model','account_model','property_model']);
         $this->_post = new Post_model();
         $this->_users = new Users_model();
