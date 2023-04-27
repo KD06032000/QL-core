@@ -87,14 +87,12 @@ class Classroom extends Admin_Controller
     public function ajax_add()
     {
         $this->_validate();
-        $data_store = [];
         $data_store['malop'] = strip_tags(trim($this->input->post('malop')));
         $data_store['name'] = strip_tags(trim($this->input->post('name')));
         $data_store['siso'] = strip_tags(trim($this->input->post('siso')));
-        $data_store['active'] = strip_tags(trim($this->input->post('active')));
+        $data_store['active'] = $this->input->post('active');
         $data_store['subject'] = strip_tags(trim($this->input->post('subject')));
-        
-        if (($this->data_store) !== false) {
+        if (($this->_data->insert($data_store)) !== false) {
             // log action
             $action = $this->router->fetch_class();
             $note = "Insert $action: " . $this->db->insert_id();
@@ -114,13 +112,14 @@ class Classroom extends Admin_Controller
     public function ajax_update()
     {
         $this->_validate();
-        $data_store = $this->input->post();
-        foreach ($data_store as $key => $val) {
-            $data_store[$key] = strip_tags(trim($val));
-        }
-        // dd($data_store);
-        $response = $this->update($this->input->post('id'), $data_store);
-        // dd($response);
+        $data_store = [];
+        $data_store['malop'] = strip_tags(trim($this->input->post('malop')));
+        $data_store['name'] = strip_tags(trim($this->input->post('name')));
+        $data_store['siso'] = strip_tags(trim($this->input->post('siso')));
+        $data_store['active'] = $this->input->post('active');
+        $data_store['subject'] = trim($this->input->post('subject'));
+        dd($data_store);
+        $response = $this->_data->update(array('id' => $this->input->post('id')), $data_store);
         if ($response != false) {
             // log action
             $action = $this->router->fetch_class();

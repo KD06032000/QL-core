@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Student_model extends APS_Model
+class Students_model extends APS_Model
 {
     public $table;
     public function __construct()
@@ -22,4 +22,11 @@ class Student_model extends APS_Model
         return $query;
     }
 
+    public function selectClass() {
+		$query =  $this->db->select('class.class_name as tenlop,students.*,' )
+		->from('class')
+		->join('students','students.student_class = class.id')
+		->get();
+		return $query->result();
+	}
 }

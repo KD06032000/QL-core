@@ -26,11 +26,9 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                             <th><?php echo lang('text_msv'); ?></th>
                             <th><?php echo lang('text_full_name'); ?></th>
                             <th><?php echo lang('text_email'); ?></th>
-                            <th><?php echo lang('text_date_of_birth'); ?></th>
                             <th><?php echo lang('text_gender'); ?></th>
+                            <th><?php echo lang('text_date_of_birth'); ?></th>
                             <th><?php echo lang('text_address'); ?></th>
-                            <!-- <th><?php echo lang('text_class'); ?></th>
-                            <th><?php echo lang('text_subject'); ?></th> -->
                             <?php showColumnAction(); ?>
                         </tr>
                         </thead>
@@ -81,13 +79,6 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                                    class="form-control" type="text"/>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                            <div class="form-group">
-                                <label>Ngày sinh</label>
-                                <input class="form-control datepicker" type="text" placeholder="<?php echo lang('form_date_of_birth') ?>"
-                                    name="date_of_birth" autocomplete="off" value="<?= date('d/m/Y') ?>">
-                            </div>
-                    </div>
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label><?php echo lang('form_gender'); ?></label>
@@ -99,6 +90,13 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                             </div>
                         </div>
                     </div> 
+                    <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Ngày sinh</label>
+                                <input class="form-control datepicker" type="text" placeholder="<?php echo lang('form_date_of_birth') ?>"
+                                    name="date_of_birth" autocomplete="off" value="">
+                            </div>
+                    </div>
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label><?php echo lang('form_address'); ?></label>
@@ -106,7 +104,6 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                                    class="form-control" type="text"/>
                         </div>
                     </div>
-
                 </div>
                 <?php echo form_close() ?>
             </div>

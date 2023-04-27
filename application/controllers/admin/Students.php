@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Student extends Admin_Controller
+class Students extends Admin_Controller
 {
     protected $_data;
     protected $_name_controller;
@@ -11,9 +11,9 @@ class Student extends Admin_Controller
     {
         parent::__construct();
         //tải thư viện
-        $this->lang->load('student_lang');
-        $this->load->model('Student_model');
-        $this->_data = new Student_model();
+        $this->lang->load('students_lang');
+        $this->load->model('Students_model');
+        $this->_data = new Students_model();
         $this->_name_controller = $this->router->fetch_class();
     }
 
@@ -41,10 +41,10 @@ class Student extends Admin_Controller
         $page = $no / $length + 1;
         $params['page'] = $page;
         $params['limit'] = $length;
-
         $list = $this->_data->getData($params);
         $data = array();
         $no = $this->input->post('start');
+        
         if (!empty($list)) foreach ($list as $item) {
             $no++;
             $row = array();
@@ -53,8 +53,8 @@ class Student extends Admin_Controller
             $row[] = $item->msv;
             $row[] = $item->full_name;
             $row[] = $item->email;
-            $row[] = showCenter(formatDate($item->date_of_birth, 'd/m/Y'));
-            $row[] = $item->gender ? '<div class="text-center"><span >Nam</span></div>' : '<div class="text-center"><span >Nữ</span></div>';;
+            $row[] = $item->gender ? '<div class="text-center"><span >Nam</span></div>' : '<div class="text-center"><span >Nữ</span></div>';
+            $row[] = showCenter(formatDate($item->date_of_birth)) ;
             $row[] = $item->address;
             //thêm action
             $action = button_action($item->id);
@@ -87,19 +87,14 @@ class Student extends Admin_Controller
     public function ajax_add()
     {
         $this->_validate();
-        $data_store = [];
-        $data_store['msv'] = strip_tags(trim($this->input->post('msv')));
-        $data_store['email'] = strip_tags(trim($this->input->post('email')));
-        $data_store['full_name'] = strip_tags(trim($this->input->post('full_name')));
-        $data_store['date_of_birth'] = strip_tags(trim($this->input->post('date_of_birth')));
-        $data_store['gender'] = trim($this->input->post('gender'));
-        $data_store['address'] = strip_tags(trim($this->input->post('address')));
-        if (($this->data_store) !== false) {
-            // log action
+        $data_store = $this->input->post();
+        if (!empty($date_of_birth) && isDateTime($date_of_birth))
+            $data_store['date_of_birth'] = convertDate($date_of_birth);
+        if (($this->_data->save($data_store)) !== false) {
+            // log action 
             $action = $this->router->fetch_class();
             $note = "Insert $action: " . $this->db->insert_id();
             $this->addLogaction($action, $note);
-            // dd('asd');
             $message['type'] = 'success';
             $message['message'] = $this->lang->line('mess_add_success');
         } else {
@@ -116,17 +111,18 @@ class Student extends Admin_Controller
     {
         $this->_validate();
         $data_store = $this->input->post();
+        $date_of_birth = strip_tags(trim($this->input->post('date_of_birth')));
+        if (!empty($date_of_birth) && isDateTime($date_of_birth))
+            $data_store['date_of_birth'] = convertDate($date_of_birth);
         foreach ($data_store as $key => $val) {
             $data_store[$key] = strip_tags(trim($val));
         }
-        $response = $this->update($this->input->post('id'), $data_store);
-        // dd($response);
+        $response = $this->_data->update(array('id' => $this->input->post('id')), $data_store);
         if ($response != false) {
             // log action
             $action = $this->router->fetch_class();
             $note = "Update $action: " . $this->input->post('id');
             $this->addLogaction($action, $note);
-            
             $message['type'] = 'success';
             $message['message'] = $this->lang->line('mess_update_success');
         } else {
@@ -134,33 +130,6 @@ class Student extends Admin_Controller
             $message['message'] = $this->lang->line('mess_update_unsuccess');
         }
         die(json_encode($message));
-
-        // $this->_validate();
-        // $data_store = [];
-        // $data_store['msv'] = strip_tags(trim($this->input->post('msv')));
-        // $data_store['email'] = strip_tags(trim($this->input->post('email')));
-        // $data_store['full_name'] = strip_tags(trim($this->input->post('full_name')));
-        // $data_store['date_of_birth'] = strip_tags(trim($this->input->post('date_of_birth')));
-        // $data_store['gender'] = trim($this->input->post('gender'));
-        // $data_store['address'] = strip_tags(trim($this->input->post('address')));
-         
-        // foreach ($data_store as $key => $val) {
-        //     $data_store[$key] = strip_tags(trim($val));
-        // }
-        // $response = $this->update($this->input->post('id'), $data_store);
-        
-        // if ($response != false) {
-        //     // log action
-        //     $action = $this->router->fetch_class();
-        //     $note = "Update $action: " . $this->input->post('id');
-        //     $this->addLogaction($action, $note);
-        //     $message['type'] = 'success';
-        //     $message['message'] = $this->lang->line('mess_update_success');
-        // } else {
-        //     $message['type'] = 'error';
-        //     $message['message'] = $this->lang->line('mess_update_unsuccess');
-        // }
-        // die(json_encode($message));
     }
 
     /*
@@ -185,7 +154,6 @@ class Student extends Admin_Controller
         die(json_encode($message));
     }
 
-
     private function _validate($ajax = true)
     {
         if (empty($this->input->post('id')) || !empty($this->input->post('full_name'))) {
@@ -194,7 +162,6 @@ class Student extends Admin_Controller
         } else {
             $rules_fullname = 'trim|min_length[3]|max_length[50]|trim|xss_clean|callback_validate_html';
         }
-
 
         $rules = [
             [

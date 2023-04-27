@@ -328,7 +328,6 @@ class APS_Model extends CI_Model
         if (!empty($data)) foreach ($data as $k => $item) {
             if (!is_array($item)) $data_store[$k] = $item;
         }
-
         if (!$this->db->insert($tablename, $data_store)) {
             log_message('info', json_encode($data_store));
             log_message('error', json_encode($this->db->error()));

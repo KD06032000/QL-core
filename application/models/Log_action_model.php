@@ -26,7 +26,6 @@ class Log_action_model extends APS_Model
             $data_notify['is_read'] = $is_read;
             $this->save($data_notify, $this->table_notify_account);
         }
-
         return true;
     }
 

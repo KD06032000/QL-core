@@ -1,9 +1,9 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 // Tiêu đề
-$lang['heading_title'] = 'Danh sách sinh viên';
+$lang['heading_title'] = 'Danh sách lớp học';
 // $lang['heading_title_logged'] = 'Danh sách đăng nhập';
-$lang['heading_title_add'] = 'Thêm sinh viên';
-$lang['heading_title_edit'] = 'Sửa sinh viên';
+$lang['heading_title_add'] = 'Thêm lớp học';
+$lang['heading_title_edit'] = 'Sửa lớp học';
 
 
 //Danh sách text

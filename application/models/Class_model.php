@@ -21,5 +21,8 @@ class Class_model extends APS_Model
         $query = $this->db->get()->result();
         return $query;
     }
-    
+    public function selectClass() {
+		$query =  $this->db->get('class');
+		return $query->result();
+	}
 }
