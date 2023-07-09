@@ -21,7 +21,7 @@ class Setting extends Admin_Controller
         $this->breadcrumbs->push($data['heading_title'], '#');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         /*Breadcrumbs*/
-        //dd($data);
+        
         $dataPost = $this->input->post();
         if (!empty($dataPost)) {
 
@@ -47,7 +47,7 @@ class Setting extends Admin_Controller
                 redirect('admin/setting', 'refresh');
             }
         }
-        //dd($data);
+        
         $data['main_content'] = $this->load->view($this->template_path . 'setting/index', $data, TRUE);
         $this->load->view($this->template_main, $data);
     }

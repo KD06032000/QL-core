@@ -1,4 +1,3 @@
-
 function loadImageThumb(url, name) {
 
     if (typeof name === 'undefined' || name === '') {
@@ -7,7 +6,6 @@ function loadImageThumb(url, name) {
     let imageThumbnail = $(document).find('[name="' + name + '"]');
 
     if (!imageThumbnail.length) return;
-
     let link;
     if (url === '' || url == null) {
         link = '//via.placeholder.com/400x200';
@@ -35,6 +33,15 @@ function loadMultipleMediaByName(name, element, data) {
     }
 }
 
+function loadMultipleFilesByName(name, element, data) {
+    if (data !== null && (data).length > 0) {
+        data = $.isArray(data) ? data : JSON.parse(data);
+        $.each(data, function (i, v) {
+            $('#' + element).append(files_name(name, i + 1, v));
+        });
+    }
+}
+
 function chooseImage(idElement) {
     moxman.browse({
         view: 'thumbs',
@@ -48,7 +55,6 @@ function chooseImage(idElement) {
             $('#' + idElement).val(urlImageResponse).parent().find('img').attr('src', image);
         }
     });
-
 }
 
 function chooseMultipleMedia(idElement) {
@@ -83,8 +89,8 @@ function chooseMultipleMediaName(idElement, name) {
             $.each(args['files'], function (i, value) {
                 count = count + 1;
                 let url = value.url;
-                let urlImageResponse = url.replace(script_name + media_name, '');
-                let html = itemGallery_by_name(name, count, urlImageResponse);
+                let urlFileResponse = url.replace(script_name + media_name, '');
+                let html = itemGallery_by_name(name, count, urlFileResponse);
                 $('#' + idElement).append(html);
             });
             $('#' + idElement).attr('data-id', $('#' + idElement + ' .item_gallery:last').data('count'));
@@ -92,8 +98,29 @@ function chooseMultipleMediaName(idElement, name) {
     });
 }
 
-function chooseFiles(idElement) {
+function chooseMultipleFiles(idElement,name) {
+    let count = parseInt($('#' + idElement).attr('data-id'));
+    moxman.browse({
+        path: '/media/files',
+        view: 'thumbs',
+        multiple: true,
+        extensions: 'jpg,jpeg,gif,png,ico,pdf,doc,docx,xls,xlsx',
+        no_host: true,
+        upload_auto_close:true,
+        oninsert: function (args) {
+            $.each(args['files'], function (i, value) {
+                count = count + 1;
+                let url = value.url;
+                let urlFileResponse = url.replace(script_name + media_name, '');
+                let html = files_name(name, count, urlFileResponse);
+                $('#' + idElement).append(html);
+            });
+            $('#' + idElement).attr('data-id', $('#' + idElement + ' .files_name:last').data('count'));
+        }
+    });
+}
 
+function chooseFiles(idElement) {
     moxman.browse({
         path: '/media/files',
         view: 'thumbs',
@@ -107,22 +134,15 @@ function chooseFiles(idElement) {
     });
 }
 
-function chooseMultipleFiles(idElement) {
-
-    moxman.browse({
-        path: '/media/brochure',
-        view: 'thumbs',
-        multiple: true,
-        extensions: 'jpg,jpeg,gif,png,ico,pdf,doc,docx,xls,xlsx',
-        no_host: true,
-        oninsert: function (args) {
-            let arrImage = [];
-            $.each(args.files, function (i, val) {
-                arrImage[i] = "brochure/" + val.name;
-            });
-            $('#' + idElement).val(JSON.stringify(arrImage))
-        }
-    });
+function files_name(name, count, urlFileResponse) {
+    if ($('[name="' + name + '"][value="' + urlFileResponse + '"]').length === 0) {
+        return html = "<div class='files_name item_" + count + "' data-count='" + count + "' style='display: grid; grid-template-columns: 1fr 1fr; font-size: 18px; color: #da1e1e; cursor: pointer;'>" +
+            "<a href='" + media_url + "/" + urlFileResponse + "' data-fancybox='file'>" +
+            "<ul> <li id= 'item_" + count + "'>"+ media_url + "/" + urlFileResponse +"</li> </ul>" +
+            "</a>" +
+            "<input type='hidden' name='" + name + "' value='" + urlFileResponse + "' value='\" + urlFileResponse + \"'  >" +
+            "<span class='fa fa-times removeFiles' onclick='removeInputImage(this)'></span></div>";
+    }
 }
 
 function itemGallery(count, urlImageResponse) {

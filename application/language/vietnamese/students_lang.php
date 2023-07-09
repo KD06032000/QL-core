@@ -14,8 +14,11 @@ $lang['text_email']   = 'Email';
 $lang['text_date_of_birth']   = 'Ngày sinh';
 $lang['text_gender']      = 'Giới tính';
 $lang['text_address']   = 'Địa chỉ';
+$lang['text_status']   = 'Trạng thái';
+$lang['text_featured']   = 'Nổi bật';
 $lang['text_class'] = 'Tên lớp';
 $lang['text_subject'] = 'Môn học';
+
 
 
 //Danh sách form
@@ -29,6 +32,7 @@ $lang['form_gender_female']      = 'Nữ';
 $lang['form_address'] = ' Địa chỉ';
 $lang['form_class'] = 'Tên lớp';
 $lang['form_subject'] = 'Môn học';
+$lang['from_category']          = 'Danh mục trường học';
 //Danh sách lỗi
 
 

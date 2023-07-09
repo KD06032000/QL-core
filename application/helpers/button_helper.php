@@ -213,6 +213,24 @@
         }
 
     }
+    if (!function_exists('show_option_status')) {
+
+        function show_option_status($id = '')
+        {
+            $_this =& get_instance();
+            $per = getPerButton();
+            if (!empty($per['delete']) || !empty($per['edit']) || $_this->session->userdata['user_id'] == 1) {
+                ?>
+                <div class="form-group">
+                    <?php showOptionStatus() ?>
+                </div>
+                <?php
+            } else {
+                echo '<input type="hidden" value="0" name="is_option" />';
+            }
+        }
+
+    }
     if (!function_exists('showColumnAction')) {
 
         function showColumnAction()

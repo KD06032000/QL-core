@@ -198,9 +198,14 @@ $lang['download_sample'] ='Tải mẫu';
 //Trạng thái
 $lang['text_status_0']               = 'Hủy';
 $lang['text_status_1']               = 'Hiển thị';
-$lang['text_status_2']               = 'Nháp';
+$lang['text_status_2']               = 'Bảo lưu';
 $lang['text_status_3']               = 'Đã gửi';
 
+//trạng thái sinh vien
+$lang['status_student_0']               = 'Nghỉ học';
+$lang['status_student_1']               = 'Đang học';
+$lang['status_student_2']               = 'Bảo lưu';
+$lang['status_student_3']                  = 'Đã gửi';
 //Nổi bật
 $lang['text_isfeatured_0']               = 'Không';
 $lang['text_isfeatured_1']               = 'Có';

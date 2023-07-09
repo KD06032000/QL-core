@@ -88,6 +88,32 @@ if (!function_exists('showFeatured')) {
         return ($status == true) ? '<div class="text-center"><i data-value="1" class="text-primary fa fa-lg fa-star ' . $cls . '"></i></div>' : '<div class="text-center"><i data-value="0" class="text-primary fa fa-lg fa-star-o ' . $cls . '"></i></div>';
     }
 }
+if (!function_exists('showStatusStudents')) {
+    function showStatusStudents($option)
+    {
+        $_this = &get_instance();
+        $per = getPerButton();
+        if (isset($per['edit']) || $_this->session->userdata['user_id'] == 1)
+            $cls = 'btnUpdateOption';
+        else $cls = '';
+
+        switch ($option) {
+            case 1:
+                $row = '<span class="label label-success ' . $cls . '" data-value="1">' . $_this->lang->line('status_student_1') . '</span>';
+                break;
+            case 2:
+                $row = '<span class="label label-default ' . $cls . '" data-value="2">' . $_this->lang->line('status_student_2') . '</span>';
+                break;
+            case 3:
+                $row = '<span class="label label-info" data-value="3">' . $_this->lang->line('text_status_3') . '</span>';
+                break;
+            default:
+                $row = '<span class="label label-danger ' . $cls . '" data-value="0">' . $_this->lang->line('status_student_0') . '</span>';
+                break;
+        }
+        return '<div class="text-center">' . $row . '</div>';
+    }
+}
 if (!function_exists('showStatus')) {
     function showStatus($status)
     {
@@ -183,6 +209,18 @@ if (!function_exists('showSelectStatus')) {
         $html = '<label>Trạng thái</label><select class="form-control" name="is_status">';
         foreach ($status as $item) {
             $html .= '<option value="' . $item . '" ' . ($selected == $item ? 'selected' : '') . '>' . lang('text_status_' . $item) . '</option>';
+        }
+        $html .= '</select>';
+        echo $html;
+    }
+}
+
+if (!function_exists('showOptionStatus')) {
+    function showOptionStatus($selected = 1, $option = [0, 1, 2])
+    {
+        $html = '<label>Trạng thái</label><select class="form-control" name="is_option">';
+        foreach ($option as $item) {
+            $html .= '<option value="' . $item . '" ' . ($selected == $item ? 'selected' : '') . '>' . lang('status_student_' . $item) . '</option>';
         }
         $html .= '</select>';
         echo $html;

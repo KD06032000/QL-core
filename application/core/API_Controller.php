@@ -151,7 +151,7 @@
 			return false;
 		}
 
-		public function setDataRedis($key = null, $data, $time = 7 * 24 * 60 * 60)
+		public function setDataRedis($key, $data, $time = 7 * 24 * 60 * 60)
 		{
 			if (ACTIVE_REDIS == TRUE) {
 				$key_redis = REDIS_PREFIX . $key;

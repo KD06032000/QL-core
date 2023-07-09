@@ -1,6 +1,6 @@
 <ul class="nav nav-pills">
   <?php if(!empty($this->config->item('cms_language'))) foreach ($this->config->item('cms_language') as $lang_code => $lang_name){ ?>
-    <li<?php echo ($lang_code == 'vi') ? ' class="active"' : '';?>><a href="#tab_gllery_<?php echo $lang_code;?>" data-toggle="tab"><?php echo $lang_name;?></a></li>
+    <li <?php echo ($lang_code == 'vi') ? 'class="active"' : '';?> ><a href="#tab_gllery_<?php echo $lang_code;?>" data-toggle="tab"><?php echo $lang_name;?></a></li>
   <?php } ?>
 </ul>
 <div class="tab-content">

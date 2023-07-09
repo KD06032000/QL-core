@@ -149,7 +149,6 @@ if (!function_exists('convertDate')) {
         $dateEx = explode($default, $date);
         $dateNew = $dateEx[2] . '-' . $dateEx[1] . '-' . $dateEx[0];
         if ($type != 'date') $dateNew = $dateNew . ' ' . $dateTime[1];
-        
         return $dateNew;
     }
 

@@ -137,9 +137,7 @@ const ACTION = {
         $(document).on("click", '#add_form', function () {
             slug_disable = false;
             save_method = 'add';
-
             LOAD.select2();
-
             var title = '';
             switch (controller) {
                 case 'category':
@@ -312,7 +310,6 @@ const LIB = {
 
 const COMMON = {
     init: function () {
-
         // ACTIVE MENUS
         this.active_menus();
         this.row_checkbox();
@@ -344,6 +341,24 @@ const COMMON = {
                     statusValue = 1;
             }
             AJAX.update_field($(this).closest('tr').find('[name="id[]"]').val(), 'is_status', statusValue);
+        });
+
+         // Update StatusOption
+         $(document).on('click', ".btnUpdateOption", function () {
+            
+            let option = $(this).data('value');
+            let optionValue;
+            switch (option) {
+                case 1: 
+                    optionValue = 0;
+                    break;
+                case 2:
+                    optionValue = 1;
+                    break;
+                default:
+                    optionValue = 2;
+            }
+            AJAX.update_field($(this).closest('tr').find('[name="id[]"]').val(), 'is_option', optionValue);
         });
 
         // Update Status không có nháp
@@ -388,7 +403,6 @@ const COMMON = {
 
         $(document).on('change', '.update_single_field', function () {
             let _this = $(this);
-
             let id = _this.attr('data-id');
             let field = _this.attr('name');
             let value = _this.val();
@@ -453,18 +467,13 @@ const LOAD = {
         form = typeof form !== 'undefined' ? form : '#form';
         that.loaded = [];
         if (typeof data === 'object') {
-
             $.each(data, function (index, dataItem) {
                 if (typeof dataItem === 'object' && dataItem) {
-
-
                     let lang_code = dataItem.language_code;
                     $.each(dataItem, function (name, value) {
-
                         if (name === 'id') {
                             that.prefixUrl(value);
                         }
-
                         let elements = $(form + ' [name="' + name + '"]');
                         if (elements.length === 0 && $.inArray(name, that.multiple) === -1) {
                             // Đa ngôn ngữ
@@ -615,7 +624,6 @@ const AJAX = {
             success: function (data) {
                 LOAD.autoFill(data);
                 LOAD.select2(data);
-
                 if (controller === 'groups') {
                     load_permission(id, data);
                 }
@@ -675,9 +683,7 @@ const AJAX = {
         let btnSave = $('#btnSave');
         btnSave.text(language['btn_saving']);
         btnSave.attr('disabled', true);
-
         if (load_tiny) TINYMCE.create_data();
-
         $.ajax({
             url: url,
             type: "POST",
@@ -717,7 +723,6 @@ const AJAX = {
         });
     },
     delete: function (i, arr) {
-
         let id = typeof arr !== "undefined" ? arr[i] : i;
 
         $.ajax({

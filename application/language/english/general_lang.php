@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 // Danh sách text
 $lang['text_home']              = 'Home';
-$lang['text_product']              = 'Products';
+$lang['text_product']           = 'Products';
 $lang['text_dash']              = 'Bảng điều khiển';
 $lang['text_user']              = 'Thành viên';
-$lang['text_user_logged']              = 'Đăng nhập thiết bị gần đây';
+$lang['text_user_logged']       = 'Đăng nhập thiết bị gần đây';
 $lang['text_group']             = 'Nhóm thành viên';
 $lang['text_profile']           = 'Hồ sơ';
 $lang['text_setting']           = 'Cài đặt';
@@ -12,7 +12,7 @@ $lang['text_category']          = 'Category';
 $lang['text_newsletter']        = 'Danh sách email';
 $lang['text_media_manager']     = 'Quản lý media';
 $lang['text_post']              = 'Bài viết';
-$lang['text_partner']              = 'Customer';
+$lang['text_partner']           = 'Customer';
 $lang['text_showroom']          = 'Showroom';
 $lang['text_more_info']         = 'Xem chi tiết';
 

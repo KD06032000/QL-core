@@ -10,6 +10,7 @@ class APS_Model extends CI_Model
     public $table_trans;
     public $table_category;
     public $table_property;
+    public $table_school;
     public $table_tag;
     public $primary_key;
     public $column_order;
@@ -89,6 +90,16 @@ class APS_Model extends CI_Model
             }
         }
 
+        if (!empty($school_id)) {
+            if (!empty($this->table_school)) {
+                $nameModel = str_replace('_model', '', $this->table);
+                $this->db->join($this->table_school, "$this->table.id = $this->table_school.{$nameModel}_id");
+                $this->db->where_in("$this->table_school.school_id", $school_id);
+            } else {
+                $this->db->where_in("$this->table.school_id", $school_id);
+            }
+        }
+
         if (!empty($where)) {
             $this->db->where($where);
         }
@@ -97,7 +108,8 @@ class APS_Model extends CI_Model
 
         if (isset($is_status))
             $this->db->where("$this->table.is_status", $is_status);
-
+        if(isset($is_option)) 
+            $this->db->where("$this->table.is_option", $is_option);
         if (!empty($in))
             $this->db->where_in("$this->table.id", $in);
         if (!empty($not_in))
@@ -155,6 +167,7 @@ class APS_Model extends CI_Model
         if (!empty($this->table_trans)) $this->db->join($this->table_trans, "$this->table.id = $this->table_trans.id");
         if (!empty($lang_code)) $this->db->where('language_code', $lang_code);
         if (!empty($is_status)) $this->db->where('is_status', $is_status);
+       
         $query = $this->db->get();
         return $query->result();
     }
@@ -318,7 +331,6 @@ class APS_Model extends CI_Model
         return $query->result();
     }
 
-
     public function save($data, $tablename = '')
     {
         if ($tablename == '') {
@@ -327,6 +339,10 @@ class APS_Model extends CI_Model
         $data_store = array();
         if (!empty($data)) foreach ($data as $k => $item) {
             if (!is_array($item)) $data_store[$k] = $item;
+            if($k == "album" || $k == "embed_album") {
+                $data_store[$k] = json_encode($item);
+                unset($data[$k]);
+            }
         }
         if (!$this->db->insert($tablename, $data_store)) {
             log_message('info', json_encode($data_store));
@@ -347,6 +363,18 @@ class APS_Model extends CI_Model
             }
             if (isset($data['category_id'])) unset($data['category_id']);
 
+            /*Xử lý bảng school nếu có*/
+            if (!empty($this->table_school) && !empty($data['school_id']) && is_array($data['school_id'])) {
+                $dataSchool = $data['school_id'];
+                if (!empty($dataSchool)) foreach ($dataSchool as $item) {
+                    $tmpSchool[$this->table . "_id"] = $id;
+                    $tmpSchool["school_id"] = $item;
+                    if (!$this->insert($tmpSchool, $this->table_school)) return false;
+                    unset($tmpSchool);
+                }
+            }
+            if (isset($data['school_id'])) unset($data['school_id']);
+
             /*Xử lý bảng tag nếu có*/
             if (!empty($this->table_tag) && !empty($data['tag_id']) && is_array($data['tag_id'])) {
                 $dataTag = $data['tag_id'];
@@ -357,7 +385,6 @@ class APS_Model extends CI_Model
                     unset($tmpTag);
                 }
             }if (isset($data['tag_id'])) unset($data['tag_id']);
-
 
             /*Xử lý bảng property nếu có*/
             if (!empty($this->table_property) && !empty($data['property']) && is_array($data['property'])) {
@@ -423,7 +450,6 @@ class APS_Model extends CI_Model
     }
 
     public function _save_custom($data, $id){}
-
 
     public function search($conditions = null, $limit = 500, $offset = 0, $tablename = '')
     {
@@ -495,21 +521,21 @@ class APS_Model extends CI_Model
         if ($tablename == '') {
             $tablename = $this->table;
         }
-        $dataInfo = [];
+        $dataInfo = array();
         if (!empty($data)) foreach ($data as $key => $value) {
-            if (!is_array($value)) {
-                $dataInfo[$key] = $value;
-                unset($data[$key]);
-            }
+            if (!is_array($value)) $dataInfo[$key] = $value;
+                if($key == "album" || $key == "embed_album") {
+                    $dataInfo[$key] = json_encode($value);
+                    unset($data[$key]);
+                }
         }
-
+        
         if (!$this->db->update($tablename, $dataInfo, $conditions)) {
             log_message('info', json_encode($conditions));
             log_message('info', json_encode($data));
             log_message('error', json_encode($this->db->error()));
             return false;
         }
-
         /*Xử lý bảng category nếu có*/
         if (!empty($this->table_category) && isset($data['category_id'])) {
             $dataCategory = $data['category_id'];
@@ -517,6 +543,7 @@ class APS_Model extends CI_Model
             $this->delete($tmpCategory, $this->table_category);
             if (!empty($dataCategory)) foreach ($dataCategory as $item) {
                 $tmpCategory["category_id"] = $item;
+               
                 if (!$this->insert($tmpCategory, $this->table_category)) {
                     log_message('error', json_encode($this->db->error()));
                     return false;
@@ -524,6 +551,22 @@ class APS_Model extends CI_Model
             }
         }
         if (isset($data['category_id'])) unset($data['category_id']);
+
+        /*Xử lý bảng school nếu có*/
+        if (!empty($this->table_school) && isset($data['school_id'])) {
+            $dataSchool = $data['school_id'];
+            $tmpSchool[$this->table . "_id"] = $conditions['id'];
+            $this->delete($tmpSchool, $this->table_school);
+            if (!empty($tmpSchool)) foreach ($dataSchool as $item) {
+                $tmpSchool["school_id"] = $item;
+                
+                if (!$this->insert($tmpSchool, $this->table_school)) {
+                    log_message('error', json_encode($this->db->error()));
+                    return false;
+                }
+            }
+        }
+        if (isset($data['school_id'])) unset($data['school_id']);
 
         /*Xử lý bảng tag nếu có*/
         if (!empty($this->table_tag) && isset($data['tag_id'])) {
@@ -564,7 +607,6 @@ class APS_Model extends CI_Model
             unset($tmpProperty);
         }
         if (isset($data['property'])) unset($data['property']);
-
         $this->_update_custom($conditions, $data);
 
         /*Xử lý bảng translate nếu có*/
